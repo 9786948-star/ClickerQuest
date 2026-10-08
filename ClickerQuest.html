@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!-- AP Computer Science Principles - ClickerQuest -->
+<html>
+
+<head>
+    <title>ClickerQuest</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            padding-top: 20px;
+        }
+
+        button {
+            font-size: 16px;
+            padding: 12px 24px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        .main-btn {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 24px;
+            padding: 25px 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .shop-btn {
+            background-color: #008CBA;
+            color: white;
+            display: block;
+            margin: 10px auto;
+            width: 360px;
+            font-size: 15px;
+        }
+
+        .reset-btn {
+            background-color: #ff4757;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .error-msg {
+            color: #ff4757;
+            font-weight: bold;
+            height: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h2>ClickerQuest</h2>
+    </header>
+
+    <div x-data="webApp">
+        <!-- Output Displays -->
+        <h2 x-text="`Points: ${score}`"></h2>
+        <h3 x-text="`Points per Click: ${clickValue}`"></h3>
+
+        <!-- Main User Input -->
+        <button class="main-btn" @click="clickBtn()">CLICK HERE!</button>
+
+        <hr style="width: 50%; margin: 30px auto; border-color: #444;">
+
+        <!-- Shop Section -->
+        <h2>Shop</h2>
+
+        <button class="shop-btn" @click="buyUpgrade(0)" 
+                x-text="`Level 1 Upgrade (+1 Click) — Cost: ${upgradeCosts[0]} pts`"></button>
+
+        <button class="shop-btn" @click="buyUpgrade(1)" 
+                x-text="`Level 2 Upgrade (+5 Clicks) — Cost: ${upgradeCosts[1]} pts`"></button>
+
+        <button class="shop-btn" @click="buyUpgrade(2)" 
+                x-text="`Level 3 Upgrade (+20 Clicks) — Cost: ${upgradeCosts[2]} pts`"></button>
+
+        <p class="error-msg" x-text="message"></p>
+
+        <!-- Reset Button -->
+        <button class="reset-btn" @click="resetGame()">Reset Game</button>
+    </div>
+
+    <footer>
+        <p>© 2026-2027<br>
+            AP Computer Science Principles<br>
+            George Washington High School</p>
+    </footer>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('webApp', () => ({
+                // Variables & Data List (Matching Plan)
+                score: 0,
+                clickValue: 1,
+                upgradeCosts: [50, 150, 500],
+                upgradeBoosts: [1, 5, 20],
+                message: '',
+
+                // Main Click Handler
+                clickBtn() {
+                    this.score += this.clickValue;
+                    this.message = '';
+                },
+
+                // Upgrade Function & Conditional Algorithm (Matching Plan)
+                buyUpgrade(index) {
+                    if (this.score >= this.upgradeCosts[index]) {
+                        this.score -= this.upgradeCosts[index];
+                        this.clickValue += this.upgradeBoosts[index];
+                        this.upgradeCosts[index] = Math.round(this.upgradeCosts[index] * 1.5);
+                        this.message = '';
+                    } else {
+                        this.message = 'Not enough points!';
+                    }
+                },
+
+                // Reset Handler
+                resetGame() {
+                    this.score = 0;
+                    this.clickValue = 1;
+                    this.upgradeCosts = [50, 150, 500];
+                    this.message = '';
+                }
+            }));
+        });
+    </script>
+</body>
+
+</html>
